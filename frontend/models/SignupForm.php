@@ -33,7 +33,7 @@ class SignupForm extends Model
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
 
             ['password', 'required'],
-            ['password', 'string', 'min' => 12],
+            ['password', 'string', 'min' => 4],
         ];
     }
 
@@ -54,8 +54,15 @@ class SignupForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
-        return $user->save() && $this->sendEmail($user);
+//        return $user->save() && $this->sendEmail($user);
+        if($user->save()){
+            $auth = Yii::$app->authManager;
+            $role = $auth->getRole('user');
+            $auth->assign($role, $user->id);
 
+            return $user;
+        }
+        return null;
     }
 
     /**
