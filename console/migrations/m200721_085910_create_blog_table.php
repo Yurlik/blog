@@ -20,6 +20,7 @@ class m200721_085910_create_blog_table extends Migration
             'status' => $this->integer(),
             'image' => $this->string()->defaultValue(''),
             'created_at' => $this->integer()->notNull(),
+            'seourl' => $this->text(),
         ]);
     }
 

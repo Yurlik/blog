@@ -33,18 +33,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr>
     <h3><?=$model->description ?></h3>
     <?=
-    Html::img('/uploads/' .$model->image, ['width'=>'200px'])
+    Html::img('/uploads/' .$model->image, ['width'=>'300px'])
     ?>
     <p><?=$model->text ?></p>
+
+    <span class="badge">
     <?php
         //$created_at = DateTime::createFromFormat('d-m-Y', $model->created_at);
     $date = new DateTime();
+
     echo $date->setTimestamp($model->created_at)->format('Y-m-d H:i:s');
     //echo $date->format('U = Y-m-d H:i:s') . "\n";
     ?>
-    <?php
+    </span>
 
-    ?>
+    <span class="badge"><?php
+        echo 'Author: ' . $model->author->username;
+    ?></span>
 
 <!--    --><?//= DetailView::widget([
 //        'model' => $model,

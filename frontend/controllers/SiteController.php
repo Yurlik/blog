@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Blog;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -74,7 +75,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+
+        $articles = Blog::find()->with('author')->andWhere(['status'=>1])->orderBy('id')->all();
+
+        return $this->render('index', [
+            'articles' => $articles,
+        ]);
     }
 
     /**

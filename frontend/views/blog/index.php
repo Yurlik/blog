@@ -42,11 +42,29 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::img('/uploads/' .$model->image, ['alt'=>'yii','width'=>'250','height'=>'100']);
                 }
             ],
+            'seourl:ntext',
             //'created_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>Blogs articles</h3>
+                    <?php
+                    var_dump($model);
+                    ?>
+                </div>
+                <div class="col-md-4">to do -> популярные новости этой недели + список популярных тегов, например 10 шт. </div>
+            </div>
+        </div>
+    </section>
+
+
+
 
     <?php Pjax::end(); ?>
 

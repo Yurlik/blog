@@ -12,6 +12,7 @@ use yii\web\UploadedFile;
  * @property string $title
  * @property string|null $description
  * @property string|null $text
+ * @property string|null $seourl
  * @property int|null $status
  * @property string|null $image
  * @property string|null $created_at
@@ -44,6 +45,9 @@ class Blog extends \yii\db\ActiveRecord
                 'checkExtensionByMimeType' => true,
 
             ],
+            [['seourl'], 'trim'],
+            [['user_id'], 'trim'],
+
         ];
     }
 
@@ -61,20 +65,33 @@ class Blog extends \yii\db\ActiveRecord
             'status' => 'Status',
             'image' => 'Image',
             'created_at' => 'Created At',
+            'seourl' => 'ЧПУ',
         ];
     }
 
 
     public function upload()
     {
+
         $this->image = UploadedFile::getInstance($this, 'image');
 
-        $image_file_name = rand(0, 9999).'.'.$this->image->getExtension();
+        if(($this->image)){
+            $image_file_name = rand(0, 9999).'.'.$this->image->getExtension();
 
-        $this->image->saveAs( Yii::getAlias('@uploads'). '\\' . $image_file_name);
-        $this->image = $image_file_name;
+            $this->image->saveAs( Yii::getAlias('@uploads'). '\\' . $image_file_name);
+            $this->image = $image_file_name;
 
-        return $this->image;
+            return $this->image;
+        }
+        return false;
     }
+
+    public function getAuthor(){
+
+        return $this->hasOne(User::class, ['id'=>'user_id']);
+
+    }
+
+
 
 }

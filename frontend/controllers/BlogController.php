@@ -37,6 +37,8 @@ class BlogController extends Controller
      */
     public function actionIndex()
     {
+        $model = new Blog();
+
         $searchModel = new BlogSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -59,6 +61,15 @@ class BlogController extends Controller
         ]);
     }
 
+    public function actionShow($url){
+        if($model = Blog::find()->andWhere(['seourl'=>$url])->one()){
+            return $this->render('show', [
+                'model' => $model,
+            ]);
+        }
+        throw new NotFoundHttpException('this "'.$url.'" article is not found');
+
+    }
 
     protected function findModel($id)
     {
@@ -79,8 +90,15 @@ class BlogController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
+            if($model->description == ''){
+                $model->description = substr($model->text, 0, 20) . '...';
+            }
+
+            $model->user_id = Yii::$app->user->identity->id;
             $model->created_at = time();
+
             $model->upload();
+
             $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -93,11 +111,19 @@ class BlogController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $exist_img = $model->image;
 
         if ($model->load(Yii::$app->request->post())) {
+            if($model->description == ''){
+                $model->description = substr($model->text, 0, 20) . '...';
+            }
 
             $model->created_at = time();
-            $model->upload();
+            if($model->upload()){
+
+            }else{
+                $model->image = $exist_img;
+            }
             $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
