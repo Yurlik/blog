@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use common\models\Tag;
 use common\models\TagSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -124,4 +125,8 @@ class TagController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+
+
 }

@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 
+use common\models\Tag;
 use Yii;
 use common\models\Blog;
 use common\models\BlogSearch;
@@ -88,6 +89,9 @@ class BlogController extends Controller
      */
     public function actionCreate()
     {
+        $tag_model = new Tag();
+        $tag_arr = $tag_model->getAllTags();
+
         $model = new Blog();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -107,11 +111,15 @@ class BlogController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'tag_arr' => $tag_arr,
         ]);
     }
 
     public function actionUpdate($id)
     {
+        $tag_model = new Tag();
+        $tag_arr = $tag_model->getAllTags();
+
         $model = $this->findModel($id);
         $exist_img = $model->image;
 
@@ -132,6 +140,7 @@ class BlogController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'tag_arr' => $tag_arr,
         ]);
     }
 

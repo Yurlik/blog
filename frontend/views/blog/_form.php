@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use common\models\Tag;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Blog */
@@ -11,8 +14,8 @@ use yii\widgets\ActiveForm;
 <?php
 //var_dump($model);
 //echo '<hr>';
-//var_dump($modelForm);
-//echo '<hr>';
+//var_dump($model);
+//echo '<hr>';die;
 ?>
 
 <div class="blog-form">
@@ -29,12 +32,26 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
 
-<!--    --><?//= $form->field($model, 'status')->textInput() ?>
     <?= $form->field($model, 'status')->dropDownList(['off', 'on']) ?>
 
     <?= $form->field($model, 'image')->fileInput() ?>
 
-<!--    --><?//= $form->field($model, 'created_at')->textInput() ?>
+    <?php
+
+    echo $form->field($model, 'tags_array')->widget(Select2::classname(), [
+//        'data' => ArrayHelper::map(Tag::find()->all(), 'id','tag_name'),
+//        'data' => (new Tag)->getAllTags(),
+        'data' => $tag_arr,
+        'options' => ['placeholder' => 'Select tag ...', 'multiple' => true],
+        'pluginOptions' => [
+            'tags' => true,
+            'tokenSeparators' => [',', ' '],
+            'maximumInputLength' => 10
+        ],
+    ])->label('Tag Multiple');
+
+    ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
@@ -52,5 +69,14 @@ use yii\widgets\ActiveForm;
             <?php echo '<span class="tag">#'.$rel->tag->tag_name."</span>"?>
         <?php endforeach; ?>
     </div>
+    <?php
+
+
+
+
+
+
+
+    ?>
 
 </div>

@@ -21,9 +21,17 @@ $this->title = 'My Yii Application';
                 <p><?=$article->description?></p>
                 <p><?=date( 'H:i d-m-Y', $article->created_at)?></p>
                 <p><?=$article->author->username?></p>
+                <?php $i = 0; $length = count($article->blogTag);?>
                     <?php foreach ($article->blogTag as $rel): ?>
 
-                    <?=$rel->tag->tag_name ?>
+                    <?php
+                        if($i == $length-1){
+                            echo '#'.$rel->tag->tag_name;
+                        }else{
+                            echo '#'.$rel->tag->tag_name.', ';
+                        }
+                        $i++;
+                    ?>
 
                     <?php endforeach; ?>
                 <hr>
