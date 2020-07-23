@@ -51,6 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
         echo 'Author: ' . $model->author->username;
     ?></span>
 
+    <div class="tags_wrap flex-row">
+        <?php foreach($model->blogTag as $rel): ?>
+            <?php echo '<span class="tag">#'.$rel->tag->tag_name."</span>"?>
+        <?php endforeach; ?>
+    </div>
+
 <!--    --><?//= DetailView::widget([
 //        'model' => $model,
 //        'attributes' => [

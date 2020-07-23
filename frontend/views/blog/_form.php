@@ -42,4 +42,15 @@ use yii\widgets\ActiveForm;
 
     <?php ActiveForm::end(); ?>
 
+    <div class="tags_wrap flex-row">
+        <?php foreach($model->blogTag as $rel): ?>
+            <?php echo '<span class="tag">#'.$rel->tag->tag_name."</span>"?>
+        <?php endforeach; ?>
+    </div>
+    <div class="tags_wrap flex-row">
+        <?php foreach($model->blogTag as $rel): ?>
+            <?php echo '<span class="tag">#'.$rel->tag->tag_name."</span>"?>
+        <?php endforeach; ?>
+    </div>
+
 </div>

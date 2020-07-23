@@ -16,11 +16,16 @@ $this->title = 'My Yii Application';
 
                 <?php foreach($articles as $article): ?>
 
-                <h3><?=HTML::tag('a', $article->title, ['href' => ''.$article->seourl]) ?></h3>
+                <h3><?=HTML::tag('a', $article->title, ['href' => 'site/'.$article->seourl]) ?></h3>
                 <?= HTML::img('uploads/'.$article->image, ['width'=> 100, 'height'=>'auto',]) ?>
                 <p><?=$article->description?></p>
                 <p><?=date( 'H:i d-m-Y', $article->created_at)?></p>
                 <p><?=$article->author->username?></p>
+                    <?php foreach ($article->blogTag as $rel): ?>
+
+                    <?=$rel->tag->tag_name ?>
+
+                    <?php endforeach; ?>
                 <hr>
 
                 <?php endforeach; ?>

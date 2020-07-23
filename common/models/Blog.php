@@ -87,11 +87,16 @@ class Blog extends \yii\db\ActiveRecord
     }
 
     public function getAuthor(){
-
         return $this->hasOne(User::class, ['id'=>'user_id']);
-
     }
 
 
+    public function getBlogTag(){
+        return $this->hasMany(BlogTag::class, ['blog_id'=>'id']);
+    }
+
+    public function getTags(){
+        return $this->hasMany(Tag::class, ['id' => 'tag_id'])->via('blogTag');
+    }
 
 }

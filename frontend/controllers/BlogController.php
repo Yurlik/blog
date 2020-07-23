@@ -62,6 +62,7 @@ class BlogController extends Controller
     }
 
     public function actionShow($url){
+//        var_dump($url);die;
         if($model = Blog::find()->andWhere(['seourl'=>$url])->one()){
             return $this->render('show', [
                 'model' => $model,
@@ -73,7 +74,8 @@ class BlogController extends Controller
 
     protected function findModel($id)
     {
-        if (($model = Blog::findOne($id)) !== null) {
+//        if (($model = Blog::findOne($id)) !== null) {
+        if (($model = Blog::find()->with('tags')->where(['id'=>$id])->one()) !== null) {
             return $model;
         }
 
