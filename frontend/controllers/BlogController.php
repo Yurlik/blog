@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 
 use common\models\Tag;
+use common\models\Visit;
 use Yii;
 use common\models\Blog;
 use common\models\BlogSearch;
@@ -65,9 +66,24 @@ class BlogController extends Controller
 
     public function actionShow($url){
 //        var_dump($url);die;
-$comment = new Comment();
+        $client_agent = Yii::$app->request->getUserAgent();
+        $client_ip = Yii::$app->request->getUserIP();
+
+        $comment = new Comment();
 
         if($model = Blog::find()->andWhere(['seourl'=>$url])->one()){
+
+            $as_visit = Visit::find()->where(['client_agent'=>$client_agent])->andWhere(['client_ip'=>$client_ip])->andWhere(['blog_id'=>$model->id])->count();
+
+            if($as_visit !== 0){
+//                var_dump($as_visit);
+                Blog::updateAll(['unic_client'=>$model->unic_client+1], ['id'=>$model->id]);
+                $visit = new Visit();
+                $visit->blog_id = $model->id;
+                $visit->client_ip = $client_ip;
+                $visit->client_agent = $client_agent;
+                $visit->save();
+            }
 
             $comments = Comment::find()->where(['blog_id'=>$model->id])->orderBy(['id' => SORT_DESC ])->all();
 

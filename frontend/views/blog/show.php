@@ -100,7 +100,9 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 </div>
-
+<div class="unic_client_counter">
+    <?='Unic clients counter: '.$model->unic_client?>
+</div>
 
 
 
