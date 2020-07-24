@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use common\models\Comment;
 
 /**
  * BlogController implements the CRUD actions for Blog model.
@@ -64,9 +65,16 @@ class BlogController extends Controller
 
     public function actionShow($url){
 //        var_dump($url);die;
+$comment = new Comment();
+
         if($model = Blog::find()->andWhere(['seourl'=>$url])->one()){
+
+            $comments = Comment::find()->where(['blog_id'=>$model->id])->orderBy(['id' => SORT_DESC ])->all();
+
             return $this->render('show', [
                 'model' => $model,
+                'comment' => $comment,
+                'comments' => $comments,
             ]);
         }
         throw new NotFoundHttpException('this "'.$url.'" article is not found');
