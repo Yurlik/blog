@@ -140,5 +140,11 @@ class Blog extends \yii\db\ActiveRecord
 
 
 
+    // search most popular blogs in period
+
+    public function getMostPopInPeriod($limit, $days){
+        $time = time() - 86400*$days;
+        return Blog::find()->where(['status' => 1])->andWhere('created_at > '.$time.'')->orderBy(['unic_client'=>SORT_DESC ])->asArray()->limit($limit)->all();
+    }
 
 }

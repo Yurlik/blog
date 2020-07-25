@@ -74,8 +74,8 @@ class BlogController extends Controller
         if($model = Blog::find()->andWhere(['seourl'=>$url])->one()){
 
             $as_visit = Visit::find()->where(['client_agent'=>$client_agent])->andWhere(['client_ip'=>$client_ip])->andWhere(['blog_id'=>$model->id])->count();
-
-            if($as_visit !== 0){
+//var_dump($as_visit);die;
+            if($as_visit == 0){
 //                var_dump($as_visit);
                 Blog::updateAll(['unic_client'=>$model->unic_client+1], ['id'=>$model->id]);
                 $visit = new Visit();
@@ -85,12 +85,18 @@ class BlogController extends Controller
                 $visit->save();
             }
 
+            /*most pop blog in period*/
+            $mpip = (new Blog())->getMostPopInPeriod(3, 7);
+            /*most pop tags*/
+//            SELECT COUNT(*), `tag_id` FROM `blog_tag` GROUP BY `tag_id` HAVING COUNT(*) > 1
+
             $comments = Comment::find()->where(['blog_id'=>$model->id])->orderBy(['id' => SORT_DESC ])->all();
 
             return $this->render('show', [
                 'model' => $model,
                 'comment' => $comment,
                 'comments' => $comments,
+                'mpip' => $mpip,
             ]);
         }
         throw new NotFoundHttpException('this "'.$url.'" article is not found');

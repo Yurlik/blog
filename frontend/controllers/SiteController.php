@@ -77,9 +77,10 @@ class SiteController extends Controller
     {
 
         $articles = Blog::find()->with('author')->andWhere(['status'=>1])->orderBy('id')->all();
-
+        $mpip = (new Blog())->getMostPopInPeriod(3, 7);
         return $this->render('index', [
             'articles' => $articles,
+            'mpip' => $mpip,
         ]);
     }
 

@@ -43,6 +43,15 @@ $this->title = 'My Yii Application';
                 <h2>to do</h2>
 
                 <p> -> популярные новости этой недели + список популярных тегов, например 10 шт.</p>
+                <?php foreach($mpip as $item):?>
+                    <?php
+//                    var_dump($item['id']);
+                    ?>
+                    <h4><?=HTML::tag('a', $item['title'], ['href' => 'site/'.$item['seourl']]) ?></h4>
+                    <p><?=$item['description'] ?></p>
+
+                <?php endforeach;?>
+
 
             </div>
         </div>
