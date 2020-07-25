@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 
+use common\models\BlogTag;
 use common\models\Tag;
 use common\models\Visit;
 use Yii;
@@ -87,9 +88,11 @@ class BlogController extends Controller
 
             /*most pop blog in period*/
             $mpip = (new Blog())->getMostPopInPeriod(3, 7);
-            /*most pop tags*/
-//            SELECT COUNT(*), `tag_id` FROM `blog_tag` GROUP BY `tag_id` HAVING COUNT(*) > 1
 
+            /*most pop tags*/
+            $tags_names = (new BlogTag())->getMostPopTags(5);
+//var_dump($tags_names);die;
+            /*comments*/
             $comments = Comment::find()->where(['blog_id'=>$model->id])->orderBy(['id' => SORT_DESC ])->all();
 
             return $this->render('show', [
@@ -97,6 +100,7 @@ class BlogController extends Controller
                 'comment' => $comment,
                 'comments' => $comments,
                 'mpip' => $mpip,
+                'tags_names' =>$tags_names,
             ]);
         }
         throw new NotFoundHttpException('this "'.$url.'" article is not found');

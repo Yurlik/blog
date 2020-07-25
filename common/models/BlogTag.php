@@ -49,6 +49,20 @@ class BlogTag extends \yii\db\ActiveRecord
     }
 
 
+    public function getTagById($id){
+        return $this->hasOne(Tag::class, ['id'=>$id]);
+    }
 
+
+
+    /*most pop tags*/
+    public function getMostPopTags($limit){
+
+        $query = (new \yii\db\Query())->select([ 'tag_id'])->from('blog_tag')->groupBy('tag_id')->orderBy('COUNT(*) DESC');
+        $tags_names = (new \yii\db\Query())->select('tag_name')->from('tag')->where(['id' => $query])->limit($limit)->all();
+
+        return $tags_names;
+
+    }
 
 }

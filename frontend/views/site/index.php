@@ -40,19 +40,21 @@ $this->title = 'My Yii Application';
 
             </div>
             <div class="col-lg-3">
-                <h2>to do</h2>
-
-                <p> -> популярные новости этой недели + список популярных тегов, например 10 шт.</p>
                 <?php foreach($mpip as $item):?>
-                    <?php
-//                    var_dump($item['id']);
-                    ?>
                     <h4><?=HTML::tag('a', $item['title'], ['href' => 'site/'.$item['seourl']]) ?></h4>
                     <p><?=$item['description'] ?></p>
-
                 <?php endforeach;?>
-
-
+                <hr>
+                <div class="most_rel_tags">
+                    <h5>5 самых популярных тегов</h5>
+                    <div class="most_rel_tags">
+                        <?php
+                        foreach ($tags_names as $tag_n){
+                            echo '<span>#'.$tag_n['tag_name'].'</span><br>';
+                        }
+                        ?>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use common\models\Blog;
+use common\models\BlogTag;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -75,12 +76,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        /*most pop tags*/
+        $tags_names = (new BlogTag())->getMostPopTags(5);
 
         $articles = Blog::find()->with('author')->andWhere(['status'=>1])->orderBy('id')->all();
         $mpip = (new Blog())->getMostPopInPeriod(3, 7);
         return $this->render('index', [
             'articles' => $articles,
             'mpip' => $mpip,
+            'tags_names' => $tags_names,
         ]);
     }
 
