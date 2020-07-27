@@ -136,6 +136,8 @@ class Blog extends \yii\db\ActiveRecord
             BlogTag::deleteAll(['blog_id'=>$this->id]);
         }
 
+
+
     }
 
 
@@ -146,5 +148,21 @@ class Blog extends \yii\db\ActiveRecord
         $time = time() - 86400*$days;
         return Blog::find()->where(['status' => 1])->andWhere('created_at > '.$time.'')->orderBy(['unic_client'=>SORT_DESC ])->asArray()->limit($limit)->all();
     }
+
+
+    protected function sendEmail($user)
+    {
+        return Yii::$app
+            ->mailer
+            ->compose(
+                ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
+                ['user' => $user]
+            )
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setTo($this->email)
+            ->setSubject('Account registration at ' . Yii::$app->name)
+            ->send();
+    }
+
 
 }

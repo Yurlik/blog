@@ -49,19 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <section>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <h3>Blogs articles</h3>
-                    <?php
-                    var_dump($model);
-                    ?>
-                </div>
-                <div class="col-md-4">to do -> популярные новости этой недели + список популярных тегов, например 10 шт. </div>
-            </div>
-        </div>
-    </section>
+
 
 
 

@@ -40,13 +40,14 @@ $this->title = 'My Yii Application';
 
             </div>
             <div class="col-lg-3">
+                <h4>3 популярных статьи</h4>
                 <?php foreach($mpip as $item):?>
                     <h4><?=HTML::tag('a', $item['title'], ['href' => 'site/'.$item['seourl']]) ?></h4>
                     <p><?=$item['description'] ?></p>
                 <?php endforeach;?>
                 <hr>
                 <div class="most_rel_tags">
-                    <h5>5 самых популярных тегов</h5>
+                    <h4>5 самых популярных тегов</h4>
                     <div class="most_rel_tags">
                         <?php
                         foreach ($tags_names as $tag_n){

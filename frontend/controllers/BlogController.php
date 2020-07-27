@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-
+use yii\helpers\Url;
 use common\models\BlogTag;
 use common\models\Tag;
 use common\models\Visit;
@@ -14,6 +14,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use common\models\Comment;
+use yii\filters\AccessControl;
 
 /**
  * BlogController implements the CRUD actions for Blog model.
@@ -26,6 +27,21 @@ class BlogController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index','create','view'],
+                        'allow' => true,
+                        'roles' => ['user'],
+                    ],
+                    [
+                        'actions' => ['update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -66,7 +82,7 @@ class BlogController extends Controller
     }
 
     public function actionShow($url){
-//        var_dump($url);die;
+
         $client_agent = Yii::$app->request->getUserAgent();
         $client_ip = Yii::$app->request->getUserIP();
 
@@ -75,9 +91,9 @@ class BlogController extends Controller
         if($model = Blog::find()->andWhere(['seourl'=>$url])->one()){
 
             $as_visit = Visit::find()->where(['client_agent'=>$client_agent])->andWhere(['client_ip'=>$client_ip])->andWhere(['blog_id'=>$model->id])->count();
-//var_dump($as_visit);die;
+
             if($as_visit == 0){
-//                var_dump($as_visit);
+
                 Blog::updateAll(['unic_client'=>$model->unic_client+1], ['id'=>$model->id]);
                 $visit = new Visit();
                 $visit->blog_id = $model->id;
@@ -91,7 +107,7 @@ class BlogController extends Controller
 
             /*most pop tags*/
             $tags_names = (new BlogTag())->getMostPopTags(5);
-//var_dump($tags_names);die;
+
             /*comments*/
             $comments = Comment::find()->where(['blog_id'=>$model->id])->orderBy(['id' => SORT_DESC ])->all();
 
@@ -139,7 +155,16 @@ class BlogController extends Controller
 
             $model->upload();
 
-            $model->save();
+            if($model->save()){
+                //mail('yuserche@gmail.com', 'Тема письма', 'Текст письма', 'From: yuriycheryavski@gmail.com');
+                Yii::$app->mailer->compose()
+                    ->setFrom('yuriycheryavski@gmail.com')
+                    ->setTo('yuserche@gmail.com')
+                    ->setSubject('Создана новость, ожидает модерации')
+                    ->setTextBody('Текст сообщения')
+                    ->setHtmlBody('Id: '.$model->id.'. url: <a href="'.Url::base(true).'/blog/update?id='.$model->id.'">'.$model->title.'</a>')
+                    ->send();
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

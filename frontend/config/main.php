@@ -44,6 +44,7 @@ return [
                 'blog/index' => 'blog/index',
                 'site/login' => 'site/login',
                 'site/logout' => 'site/logout',
+                'site/signup' => 'site/signup',
                 'site/contact' => 'site/contact',
                 'site/about' => 'site/about',
                 'site/index' => 'site/index',
