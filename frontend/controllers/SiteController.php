@@ -79,7 +79,7 @@ class SiteController extends Controller
         /*most pop tags*/
         $tags_names = (new BlogTag())->getMostPopTags(5);
 
-        $articles = Blog::find()->with('author')->andWhere(['status'=>1])->orderBy('id')->all();
+        $articles = Blog::find()->with('author')->andWhere(['status'=>1])->orderBy(['id' => SORT_DESC])->all();
         $mpip = (new Blog())->getMostPopInPeriod(3, 7);
         return $this->render('index', [
             'articles' => $articles,

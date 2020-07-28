@@ -5,7 +5,10 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+//$this->title = 'My Yii Application';
+$this->registerMetaTag(['name' => 'title', 'content' => 'Blog']);
+$this->registerMetaTag(['name' => 'description', 'content' => 'Blog with articles and tags']);
+
 ?>
 <div class="site-index">
 
@@ -16,7 +19,7 @@ $this->title = 'My Yii Application';
 
                 <?php foreach($articles as $article): ?>
 
-                <h3><?=HTML::tag('a', $article->title, ['href' => 'site/'.$article->seourl]) ?></h3>
+                <h3><?=HTML::tag('a', $article->title, ['href' => '/site/'.$article->seourl]) ?></h3>
                 <?= HTML::img('uploads/'.$article->image, ['width'=> 100, 'height'=>'auto',]) ?>
                 <p><?=$article->description?></p>
                 <p><?=date( 'H:i d-m-Y', $article->created_at)?></p>

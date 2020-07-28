@@ -9,8 +9,12 @@ use yii\widgets\ActiveForm;
 /* @var $model common\models\Blog */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Blogs', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+
+$this->registerMetaTag(['name' => 'title', 'content' => $model->title]);
+$this->registerMetaTag(['name' => 'description', 'content' => $model->description]);
+
+//$this->params['breadcrumbs'][] = ['label' => 'Blogs', 'url' => ['index']];
+//$this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 

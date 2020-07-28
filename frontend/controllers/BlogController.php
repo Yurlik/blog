@@ -26,9 +26,11 @@ class BlogController extends Controller
      */
     public function behaviors()
     {
+
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['index', 'create', 'view', 'update', 'delete'],
                 'rules' => [
                     [
                         'actions' => ['index','create','view'],
@@ -65,6 +67,16 @@ class BlogController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionMyblog()
+    {
+//        $model = new Blog();
+        $articles = Blog::find()->andWhere(['user_id' => Yii::$app->user->id ])->all();
+//var_dump($articles);die;
+        return $this->render('myblog', [
+            'articles' => $articles,
         ]);
     }
 
@@ -143,7 +155,7 @@ class BlogController extends Controller
         $tag_arr = $tag_model->getAllTags();
 
         $model = new Blog();
-
+        $model->status = 0;
         if ($model->load(Yii::$app->request->post())) {
 
             if($model->description == ''){

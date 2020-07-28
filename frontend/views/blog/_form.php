@@ -31,9 +31,15 @@ use common\models\Tag;
     <?= $form->field($model, 'description')->textarea(['rows' => 2]) ?>
 
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
-
+<?php
+if(Yii::$app->user->can('admin')){
+?>
     <?= $form->field($model, 'status')->dropDownList(['off', 'on']) ?>
+<?php
+}else{
 
+}
+?>
     <?= $form->field($model, 'image')->fileInput() ?>
 
     <?php
