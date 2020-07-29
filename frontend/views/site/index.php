@@ -20,7 +20,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => 'Blog with article
                 <?php foreach($articles as $article): ?>
 
                 <h3><?=HTML::tag('a', $article->title, ['href' => '/site/'.$article->seourl]) ?></h3>
-                <?= HTML::img('uploads/'.$article->image, ['width'=> 100, 'height'=>'auto',]) ?>
+                <?= HTML::img('/uploads/'.$article->image, ['width'=> 100, 'height'=>'auto',]) ?>
                 <p><?=$article->description?></p>
                 <p><?=date( 'H:i d-m-Y', $article->created_at)?></p>
                 <p><?=$article->author->username?></p>

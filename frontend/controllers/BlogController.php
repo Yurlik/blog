@@ -15,12 +15,14 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use common\models\Comment;
 use yii\filters\AccessControl;
+use common\models\User;
 
 /**
  * BlogController implements the CRUD actions for Blog model.
  */
 class BlogController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -30,15 +32,15 @@ class BlogController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'view', 'update', 'delete'],
+                'only' => ['index', 'create', 'view', 'update', 'delete', 'forcheck', 'myblog'],
                 'rules' => [
                     [
-                        'actions' => ['index','create','view'],
+                        'actions' => ['index','create','view','myblog'],
                         'allow' => true,
                         'roles' => ['user'],
                     ],
                     [
-                        'actions' => ['update', 'delete'],
+                        'actions' => ['update', 'delete', 'forcheck'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -72,14 +74,74 @@ class BlogController extends Controller
 
     public function actionMyblog()
     {
-//        $model = new Blog();
         $articles = Blog::find()->andWhere(['user_id' => Yii::$app->user->id ])->all();
-//var_dump($articles);die;
+
         return $this->render('myblog', [
             'articles' => $articles,
         ]);
     }
 
+    public function actionForcheck()
+    {
+        $articles = Blog::find()->andWhere(['in_check' => 1])->andWhere(['is_checked' => 0])->all();
+
+        return $this->render('forcheck', [
+            'articles' => $articles,
+        ]);
+    }
+
+    public function actionToCheck($id)
+    {
+        if($model = Blog::find()->andWhere(['id'=>$id])->one()) {
+            $model::updateAll(['in_check' => 1], ['id'=>$id]);
+        }
+        return true;
+    }
+    public function actionFromCheck($id)
+    {
+        if($model = Blog::find()->andWhere(['id'=>$id])->one()) {
+            $model::updateAll(['in_check' => 0], ['id'=>$id]);
+
+        }
+        return true;
+    }
+    public function actionVerified($id)
+    {
+        if($model = Blog::find()->andWhere(['id'=>$id])->one()) {
+            $model::updateAll(['is_checked' => 1, 'in_check' => 0, 'status' => 1], ['id'=>$id]);
+            $user = User::find()->where(['id'=>$model->user_id])->one();
+            //var_dump($user->email);die;
+            Yii::$app->mailer->compose()
+                ->setFrom('yuriycheryavski@gmail.com')
+                ->setTo($user->email)
+                ->setSubject('Ваша статья отмодерирована и добавлена')
+                ->setTextBody('Текст сообщения')
+                ->setHtmlBody('Ваша статья "'.$model->title.'" отмодерирована и добавлена')
+                ->send();
+        }
+        return true;
+    }
+    //decline
+    public function actionDecline($id)
+    {
+        if($model = Blog::find()->andWhere(['id'=>$id])->one()) {
+            $model::updateAll(['is_checked' => 0, 'in_check' => 0, 'status' => 0], ['id'=>$id]);
+            $user = User::find()->where(['id'=>$model->user_id])->one();
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if(Yii::$app->request->isAjax){
+                Yii::$app->mailer->compose()
+                    ->setFrom('yuriycheryavski@gmail.com')
+                    ->setTo($user->email)
+                    ->setSubject('Ваша статья отклонена')
+                    ->setTextBody('Текст сообщения')
+                    ->setHtmlBody('Ваша статья "'.$model->title.'" отклонена ибо '.Yii::$app->request->post('decline_text'))
+                    ->send();
+            }
+        }
+        return true;
+    }
     /**
      * Displays a single Blog model.
      * @param integer $id

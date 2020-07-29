@@ -40,6 +40,7 @@ AppAsset::register($this);
         ['label' => 'Blog', 'url' => ['/blog/index']],
         ['label' => 'Tags', 'url' => ['/tag/index']],
         ['label' => 'My articles', 'url' => ['/blog/myblog']],
+        ['label' => 'For check', 'url' => ['/blog/forcheck']],
         ['label' => 'About', 'url' => ['/site/about']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
