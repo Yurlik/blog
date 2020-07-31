@@ -45,7 +45,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => 'Blog with article
             <div class="col-lg-3">
                 <h4>3 популярных статьи</h4>
                 <?php foreach($mpip as $item):?>
-                    <h4><?=HTML::tag('a', $item['title'], ['href' => 'site/'.$item['seourl']]) ?></h4>
+                    <h4><?=HTML::tag('a', $item['title'], ['href' => '/site/'.$item['seourl']]) ?></h4>
                     <p><?=$item['description'] ?></p>
                 <?php endforeach;?>
                 <hr>
