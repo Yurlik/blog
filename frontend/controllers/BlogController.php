@@ -184,7 +184,7 @@ class BlogController extends Controller
 
             $mpip = $cache->getOrSet($key, function(){
                 return (new Blog())->getMostPopInPeriod(3, 7);
-            });
+            }, 300);
 
 
             /*most pop tags*/
