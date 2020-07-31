@@ -177,7 +177,15 @@ class BlogController extends Controller
             }
 
             /*most pop blog in period*/
-            $mpip = (new Blog())->getMostPopInPeriod(3, 7);
+
+
+            $cache = Yii::$app->cache;
+            $key = 'MostPopularNews';
+
+            $mpip = $cache->getOrSet($key, function(){
+                return (new Blog())->getMostPopInPeriod(3, 7);
+            });
+
 
             /*most pop tags*/
             $tags_names = (new BlogTag())->getMostPopTags(5);
